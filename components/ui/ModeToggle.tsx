@@ -10,17 +10,13 @@ export function ModeToggle() {
 
   return (
     <button
-    //   variant="secondary"
-    //   size="icon"
-      onClick={() =>{
-
-        setTheme(theme==="system" ?"dark": "system")
-        console.log(theme);
-      }
-        
+      // variant="tertiary"
+      // size="icon"
+      onClick={() =>
+        setTheme(theme === "light" ? "dark" : theme === "dark" ? "light" : "system")
       }
     >
-      {theme === "system" ? (
+      {theme === "light" ? (
         <>
           <SunIcon className="h-[1.2rem] w-[1.2rem]" />
           <span className="sr-only">Switch to Dark Mode</span>
