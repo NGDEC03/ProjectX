@@ -4,6 +4,7 @@ import "./globals.css";
 import { ScrollBarProps } from "@/context/ScrollBar";
 import { ThemeProvider } from "@/context/ThemeContext";
 import Navbar from "@/components/layout/Navbar";
+import NextTopLoader from 'nextjs-toploader';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <NextTopLoader
+            showSpinner={false}
+            color="#5eead4"
+          />
           <ScrollBarProps>
             <Navbar />
             {children}

@@ -6,8 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Github, Twitter } from 'lucide-react';
 import Link from 'next/link';
+import { BsGithub, BsGoogle } from 'react-icons/bs';
 
 const SignUpForm = () => {
 
@@ -24,12 +24,12 @@ const SignUpForm = () => {
                 {/* Social Signup Buttons */}
                 <div className="grid grid-cols-2 gap-4">
                     <Button variant="outline" className="w-full border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800">
-                        <Github className="mr-2 h-4 w-4" />
+                        <BsGithub className="mr-2 h-4 w-4" />
                         Github
                     </Button>
                     <Button variant="outline" className="w-full border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800">
-                        <Twitter className="mr-2 h-4 w-4" />
-                        Twitter
+                        <BsGoogle className="mr-2 h-4 w-4" />
+                        Google
                     </Button>
                 </div>
 
