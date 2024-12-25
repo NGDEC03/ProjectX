@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-
 import { CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -14,6 +13,7 @@ import { Separator } from '@/components/ui/separator';
 import { useUser } from '@/context/userContext';
 import { useToast } from '@/hooks/use-toast';
 import { BsGithub, BsGoogle } from 'react-icons/bs';
+import { Loader2 } from 'lucide-react';
 
 type FormData = {
   email: string;
@@ -21,7 +21,7 @@ type FormData = {
 };
 
 const SignInForm = () => {
-
+  const [isLoading, setIsLoading] = useState(false);
   const { user, updateUser, setUser } = useUser();
   const {
     register,
@@ -33,27 +33,28 @@ const SignInForm = () => {
   const router = useRouter();
 
   const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
     try {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, data, {
         withCredentials: true,
       });
       setUser(res.data.user);
       toast({
-        title: 'Welcome',
+        title: 'Welcome back!',
         description: 'You have successfully signed in',
         duration: 3000,
       });
-      console.log(res.data.message);
-      console.log(res.data.user);
+      router.push('/');
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
-      console.error("Error fetching user:", axiosError.message);
       toast({
         title: 'Error',
         description: axiosError.message,
         duration: 3000,
         variant: 'destructive',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -68,26 +69,28 @@ const SignInForm = () => {
     <div className="max-w-md mx-auto">
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardHeader className="space-y-2 px-0">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Create Account</h2>
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Sign In</h2>
           <p className="text-slate-600 dark:text-slate-400">
-            Sign up to participate in coding contests
-
+            Welcome back! Sign in to your account
           </p>
         </CardHeader>
 
         <CardContent className="px-0 space-y-6">
-
           <div className="grid grid-cols-2 gap-4">
             <Button
+              type="button"
               variant="outline"
               className="w-full border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+              disabled={isLoading}
             >
               <BsGithub className="mr-2 h-4 w-4" />
               Github
             </Button>
             <Button
+              type="button"
               variant="outline"
               className="w-full border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+              disabled={isLoading}
             >
               <BsGoogle className="mr-2 h-4 w-4" />
               Google
@@ -109,6 +112,7 @@ const SignInForm = () => {
               id="email"
               type="email"
               placeholder="john@example.com"
+              disabled={isLoading}
               {...register('email', {
                 required: 'Email is required',
                 pattern: {
@@ -121,7 +125,6 @@ const SignInForm = () => {
             {errors.email && <p className="text-red-600 text-sm">{errors.email.message}</p>}
           </div>
 
-
           <div className="space-y-2">
             <Label htmlFor="password" className="text-slate-700 dark:text-slate-300">
               Password
@@ -129,7 +132,8 @@ const SignInForm = () => {
             <Input
               id="password"
               type="password"
-              placeholder="Create a password"
+              placeholder="Enter your password"
+              disabled={isLoading}
               {...register('password', {
                 required: 'Password is required',
                 minLength: {
@@ -146,14 +150,22 @@ const SignInForm = () => {
         <CardFooter className="px-0 flex-col space-y-4">
           <Button
             type="submit"
+            disabled={isLoading}
             className="w-full bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-600 hover:to-emerald-600 dark:from-cyan-600 dark:to-emerald-600 dark:hover:from-cyan-700 dark:hover:to-emerald-700"
           >
-            Sign Up
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              'Sign In'
+            )}
           </Button>
           <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-            Already have an account?{' '}
-            <Link href="/auth/signin" className="text-cyan-600 dark:text-cyan-500 hover:underline">
-              Sign in
+            Don&apos;t have an account?{' '}
+            <Link href="/auth/signup" className="text-cyan-600 dark:text-cyan-500 hover:underline">
+              Sign up
             </Link>
           </p>
         </CardFooter>

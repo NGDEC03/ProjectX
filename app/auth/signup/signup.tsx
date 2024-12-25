@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import axios, { AxiosError } from 'axios'
+import React, { useEffect, useState } from 'react';
+import axios, { AxiosError } from 'axios';
 import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { CardHeader, CardContent, CardFooter } from '@/components/ui/card';
@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { BsGithub, BsGoogle } from 'react-icons/bs';
+import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/userContext';
@@ -22,6 +23,7 @@ type FormData = {
 };
 
 const SignUpForm = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const { user, updateUser } = useUser();
     const router = useRouter();
     const {
@@ -33,14 +35,15 @@ const SignUpForm = () => {
     const { toast } = useToast();
 
     const onSubmit: SubmitHandler<FormData> = async (data) => {
+        setIsLoading(true);
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify`, data);
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify`, data);
             toast({
-                title: 'Account created',
-                description: 'Your account has been created successfully',
+                title: 'Success',
+                description: 'Please check your email to verify your account',
                 duration: 3000,
             });
-            console.log(res);
+            router.push('/auth/signin');
         } catch (error) {
             const axiosError = error as AxiosError<{ message: string }>;
             toast({
@@ -49,7 +52,8 @@ const SignUpForm = () => {
                 duration: 3000,
                 variant: 'destructive'
             });
-            console.error("Error fetching user:", axiosError.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -75,14 +79,18 @@ const SignUpForm = () => {
                 <CardContent className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
                         <Button
+                            type="button"
                             variant="outline"
+                            disabled={isLoading}
                             className="w-full border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
                         >
                             <BsGithub className="mr-2 h-4 w-4" />
                             Github
                         </Button>
                         <Button
+                            type="button"
                             variant="outline"
+                            disabled={isLoading}
                             className="w-full border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
                         >
                             <BsGoogle className="mr-2 h-4 w-4" />
@@ -108,6 +116,7 @@ const SignUpForm = () => {
                             <Input
                                 id="first_name"
                                 placeholder="John"
+                                disabled={isLoading}
                                 {...register('first_name', { required: 'First name is required' })}
                                 className="bg-white/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800 focus:ring-cyan-500 dark:focus:ring-cyan-600"
                             />
@@ -125,6 +134,7 @@ const SignUpForm = () => {
                             <Input
                                 id="last_name"
                                 placeholder="Doe"
+                                disabled={isLoading}
                                 {...register('last_name', { required: 'Last name is required' })}
                                 className="bg-white/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800 focus:ring-cyan-500 dark:focus:ring-cyan-600"
                             />
@@ -133,6 +143,7 @@ const SignUpForm = () => {
                             )}
                         </div>
                     </div>
+
                     <div className="space-y-2">
                         <Label
                             htmlFor="email"
@@ -144,6 +155,7 @@ const SignUpForm = () => {
                             id="email"
                             type="email"
                             placeholder="john@example.com"
+                            disabled={isLoading}
                             {...register('email', {
                                 required: 'Email is required',
                                 pattern: {
@@ -169,6 +181,7 @@ const SignUpForm = () => {
                             id="password"
                             type="password"
                             placeholder="Create a password"
+                            disabled={isLoading}
                             {...register('password', {
                                 required: 'Password is required',
                                 minLength: {
@@ -187,9 +200,17 @@ const SignUpForm = () => {
                 <CardFooter className="flex flex-col space-y-4">
                     <Button
                         type="submit"
+                        disabled={isLoading}
                         className="w-full bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-600 hover:to-emerald-600 dark:from-cyan-600 dark:to-emerald-600 dark:hover:from-cyan-700 dark:hover:to-emerald-700"
                     >
-                        Create Account
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Creating account...
+                            </>
+                        ) : (
+                            'Create Account'
+                        )}
                     </Button>
                     <p className="text-center text-sm text-slate-600 dark:text-slate-400">
                         Already have an account?{' '}
