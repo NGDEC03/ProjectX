@@ -1,15 +1,17 @@
 'use client';
 
 import React from 'react';
+import axios, { AxiosError } from 'axios'
+import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Github, Twitter } from 'lucide-react';
-import Link from 'next/link';
-import Axios from 'axios'
+import { BsGithub, BsGoogle } from 'react-icons/bs';
+import { useToast } from '@/hooks/use-toast';
+import withAuthRedirect from '@/components/hoc';
 
 type FormData = {
     first_name: string;
@@ -25,10 +27,28 @@ const SignUpForm = () => {
         formState: { errors },
     } = useForm<FormData>();
 
+    const { toast } = useToast();
+
     const onSubmit: SubmitHandler<FormData> = async (data) => {
-        const res=await Axios.post("http://localhost:8080/auth/signup",data)
-        console.log(res);
-        
+        try {
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify`, data);
+            toast({
+                title: 'Account created',
+                description: 'Your account has been created successfully',
+                duration: 3000,
+            });
+            console.log(res);
+        } catch (error) {
+            const axiosError = error as AxiosError<{ message: string }>;
+            toast({
+                title: 'Error',
+                description: axiosError.message,
+                duration: 3000,
+                variant: 'destructive'
+            });
+            console.error("Error fetching user:", axiosError.message);
+        }
+
     };
 
     return (
@@ -49,15 +69,15 @@ const SignUpForm = () => {
                             variant="outline"
                             className="w-full border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
                         >
-                            <Github className="mr-2 h-4 w-4" />
+                            <BsGithub className="mr-2 h-4 w-4" />
                             Github
                         </Button>
                         <Button
                             variant="outline"
                             className="w-full border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
                         >
-                            <Twitter className="mr-2 h-4 w-4" />
-                            Twitter
+                            <BsGoogle className="mr-2 h-4 w-4" />
+                            Google
                         </Button>
                     </div>
 
@@ -177,4 +197,4 @@ const SignUpForm = () => {
     );
 };
 
-export default SignUpForm;
+export default withAuthRedirect(SignUpForm);

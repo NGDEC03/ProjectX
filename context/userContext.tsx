@@ -1,37 +1,44 @@
 'use client';
-import { createContext, useState, useEffect, useCallback, useContext } from 'react';
-import Axios from 'axios';
-import { User } from '@/types/user';
+import { createContext, useState, useEffect, useContext } from 'react';
+import axios, { AxiosError } from 'axios';
+import { User } from '@/types/User';
+import { redirect } from 'next/navigation';
 
 interface Context {
     user: User | null;
-    updateUser: (email: string) => void;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
+    updateUser: () => void;
 }
 
-const userContext = createContext<Context | null>(null);
+const userContext = createContext<Context | undefined>(undefined);
 
-function ContextWrapper({ children }: { children: React.ReactNode }) {
+function UserContext({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
 
-    const getUser = useCallback(async (email: string) => {
+    const getUser = async () => {
         try {
-            if (email) { 
-                const res = await Axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify`);
-                setUser(res.data);
-
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify`);
+            setUser(response.data.user);
+            if (response.status === 401) {
+                setUser(null);
+                redirect('/auth/signin');
             }
         } catch (error) {
-            console.error("Error fetching user:", error);
+            const axiosError = error as AxiosError<{ message: string }>;
+            console.error("Error fetching user:", axiosError.message);
         }
+    };
+
+    useEffect(() => {
+        getUser();
     }, []);
 
-
-    const updateUser = (email: string) => {
-        getUser(email);
+    const updateUser = () => {
+        getUser();
     };
 
     return (
-        <userContext.Provider value={{ user, updateUser }}>
+        <userContext.Provider value={{ user, setUser, updateUser }}>
             {children}
         </userContext.Provider>
     );
@@ -40,9 +47,9 @@ function ContextWrapper({ children }: { children: React.ReactNode }) {
 function useUser() {
     const context = useContext(userContext)
     if (!context) {
-        throw new Error('Used within the boundaries');
+        throw new Error('Context should be used within the boundaries');
     }
-    return context
+    return context;
 }
 
-export { useUser, ContextWrapper };
+export { useUser, UserContext };

@@ -5,7 +5,8 @@ import { ScrollBarProps } from "@/context/ScrollBar";
 import { ThemeProvider } from "@/context/ThemeContext";
 import Navbar from "@/components/layout/Navbar";
 import NextTopLoader from 'nextjs-toploader';
-import { ContextWrapper } from "@/context/userContext";
+import { UserContext } from "@/context/userContext";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ContextWrapper>
+        <UserContext>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -46,9 +47,10 @@ export default function RootLayout({
           <ScrollBarProps>
             <Navbar />
             {children}
+            <Toaster />
           </ScrollBarProps>
         </ThemeProvider>
-        </ContextWrapper>
+        </UserContext>
       </body>
     </html>
   );

@@ -7,10 +7,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Github, Twitter } from 'lucide-react';
+import { BsGithub, BsGoogle } from 'react-icons/bs';
 import Link from 'next/link';
 import { useUser } from '@/context/userContext';
-import Axios from 'axios'
+import axios, { AxiosError } from 'axios'
+import { useToast } from '@/hooks/use-toast';
+import withAuthRedirect from '@/components/hoc';
 
 type FormData = {
   email: string;
@@ -18,23 +20,35 @@ type FormData = {
 };
 
 const SignInForm = () => {
-  const { user, updateUser } = useUser();
+
+  const { setUser } = useUser();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
 
+  const { toast } = useToast();
+
   const onSubmit = async (data: FormData) => {
     try {
-      const res = await Axios.post("http://localhost:8080/auth/signin", data);
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, data);
+      setUser(res.data.user);
+      toast({
+        title: 'Welcome',
+        description: 'You have successfully signed in',
+        duration: 3000,
+      });
       console.log(res);
-      
-      updateUser(res.data.email);
-
-
     } catch (error) {
-      console.error("Error during sign-in:", error);
+      const axiosError = error as AxiosError<{ message: string }>;
+      console.error("Error fetching user:", axiosError.message);
+      toast({
+        title: 'Error',
+        description: axiosError.message,
+        duration: 3000,
+        variant: 'destructive',
+      });
     }
   };
 
@@ -45,7 +59,7 @@ const SignInForm = () => {
           <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Create Account</h2>
           <p className="text-slate-600 dark:text-slate-400">
             Sign up to participate in coding contests
-            
+
           </p>
         </CardHeader>
 
@@ -56,15 +70,15 @@ const SignInForm = () => {
               variant="outline"
               className="w-full border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
             >
-              <Github className="mr-2 h-4 w-4" />
+              <BsGithub className="mr-2 h-4 w-4" />
               Github
             </Button>
             <Button
               variant="outline"
               className="w-full border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
             >
-              <Twitter className="mr-2 h-4 w-4" />
-              Twitter
+              <BsGoogle className="mr-2 h-4 w-4" />
+              Google
             </Button>
           </div>
 
@@ -136,4 +150,4 @@ const SignInForm = () => {
   );
 };
 
-export default SignInForm;
+export default withAuthRedirect(SignInForm);
