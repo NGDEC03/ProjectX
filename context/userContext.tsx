@@ -17,7 +17,9 @@ function UserContext({ children }: { children: React.ReactNode }) {
 
     const getUser = async () => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify`);
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify`, {
+                withCredentials: true,
+            });
             setUser(response.data.user);
             if (response.status === 401) {
                 setUser(null);

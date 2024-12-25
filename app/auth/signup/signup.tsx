@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios, { AxiosError } from 'axios'
 import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -11,7 +11,8 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { BsGithub, BsGoogle } from 'react-icons/bs';
 import { useToast } from '@/hooks/use-toast';
-import withAuthRedirect from '@/components/hoc';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/context/userContext';
 
 type FormData = {
     first_name: string;
@@ -21,6 +22,8 @@ type FormData = {
 };
 
 const SignUpForm = () => {
+    const { user, updateUser } = useUser();
+    const router = useRouter();
     const {
         register,
         handleSubmit,
@@ -48,8 +51,14 @@ const SignUpForm = () => {
             });
             console.error("Error fetching user:", axiosError.message);
         }
-
     };
+
+    useEffect(() => {
+        updateUser();
+        if (user?.Email) {
+            router.push('/');
+        }
+    }, [user?.Email, router, updateUser]);
 
     return (
         <div className="max-w-md mx-auto p-6 bg-white dark:bg-slate-900 rounded-lg shadow-lg">
@@ -197,4 +206,4 @@ const SignUpForm = () => {
     );
 };
 
-export default withAuthRedirect(SignUpForm);
+export default SignUpForm;

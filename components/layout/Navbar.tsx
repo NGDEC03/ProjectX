@@ -2,17 +2,8 @@
 import { Laptop, Home, Settings, GitBranch, Award, MessageCircle } from 'lucide-react';
 import { ModeToggle } from '@/components/ui/ModeToggle';
 import Link from 'next/link';
-import { useUser } from '@/context/userContext';
-import { useEffect } from 'react';
 
-const Navbar = () => {
-
-    const { updateUser } = useUser();
-
-    useEffect(() => {
-        updateUser();
-    }, [updateUser]);
-    
+const Navbar = () => {    
     return (
         <div className="fixed z-50 top-5 w-full px-6">
             <nav className="max-w-7xl mx-auto relative backdrop-blur-sm rounded-full border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 shadow-lg shadow-slate-200/20 dark:shadow-slate-900/30 p-4">

@@ -1,18 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import Link from 'next/link';
+import axios, { AxiosError } from 'axios'
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+
 import { CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { BsGithub, BsGoogle } from 'react-icons/bs';
-import Link from 'next/link';
 import { useUser } from '@/context/userContext';
-import axios, { AxiosError } from 'axios'
 import { useToast } from '@/hooks/use-toast';
-import withAuthRedirect from '@/components/hoc';
+import { BsGithub, BsGoogle } from 'react-icons/bs';
 
 type FormData = {
   email: string;
@@ -21,7 +22,7 @@ type FormData = {
 
 const SignInForm = () => {
 
-  const { setUser } = useUser();
+  const { user, updateUser, setUser } = useUser();
   const {
     register,
     handleSubmit,
@@ -29,17 +30,21 @@ const SignInForm = () => {
   } = useForm<FormData>();
 
   const { toast } = useToast();
+  const router = useRouter();
 
   const onSubmit = async (data: FormData) => {
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, data);
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, data, {
+        withCredentials: true,
+      });
       setUser(res.data.user);
       toast({
         title: 'Welcome',
         description: 'You have successfully signed in',
         duration: 3000,
       });
-      console.log(res);
+      console.log(res.data.message);
+      console.log(res.data.user);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
       console.error("Error fetching user:", axiosError.message);
@@ -51,6 +56,13 @@ const SignInForm = () => {
       });
     }
   };
+
+  useEffect(() => {
+    updateUser();
+    if (user?.Email) {
+      router.push('/');
+    }
+  }, [user?.Email, router, updateUser]);
 
   return (
     <div className="max-w-md mx-auto">
@@ -150,4 +162,4 @@ const SignInForm = () => {
   );
 };
 
-export default withAuthRedirect(SignInForm);
+export default SignInForm;
