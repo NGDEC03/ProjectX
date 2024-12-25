@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Github, Twitter } from 'lucide-react';
 import Link from 'next/link';
+import { useUser } from '@/context/userContext';
 import Axios from 'axios'
 
 type FormData = {
@@ -16,7 +17,8 @@ type FormData = {
   password: string;
 };
 
-const SignUpForm = () => {
+const SignInForm = () => {
+  const { user, updateUser } = useUser();
   const {
     register,
     handleSubmit,
@@ -24,8 +26,16 @@ const SignUpForm = () => {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    const res=await Axios.post("http://localhost:8080/auth/signin",data)
-    console.log(res)
+    try {
+      const res = await Axios.post("http://localhost:8080/auth/signin", data);
+      console.log(res);
+      
+      updateUser(res.data.email);
+
+
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+    }
   };
 
   return (
@@ -35,6 +45,7 @@ const SignUpForm = () => {
           <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Create Account</h2>
           <p className="text-slate-600 dark:text-slate-400">
             Sign up to participate in coding contests
+            
           </p>
         </CardHeader>
 
@@ -125,4 +136,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default SignInForm;
