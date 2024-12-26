@@ -22,7 +22,6 @@ type FormData = {
     last_name: string;
     email: string;
     password: string;
-    
 };
 
 const SignUpForm = () => {
@@ -39,36 +38,33 @@ const SignUpForm = () => {
     const { toast } = useToast();
 
     const onOtpComplete = async (otp: string) => {
-        try{
-            const response=await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/verifyEmail`,{"email":localStorage.getItem("email"),"verify_token":otp})
+        try {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify-email`, { "email": localStorage.getItem("email"), "verify_token": otp })
             toast({
                 title: 'Success',
                 description: 'Your account has been verified and created',
                 duration: 3000,
             });
             router.push('/');
-
         }
-        catch(err){
-const axiosError = err as AxiosError<{ message: string }>;
-      toast({
-        title: 'Error',
-        description: axiosError.response?.data.message || 'An error occurred',
-        duration: 3000,
-        variant: 'destructive',
-      });
+        catch (err) {
+            const axiosError = err as AxiosError<{ message: string }>;
+            toast({
+                title: 'Error',
+                description: axiosError.response?.data.message || 'An error occurred',
+                duration: 3000,
+                variant: 'destructive',
+            });
+        } finally {
+            setOtpDialogOpen(false);
+            localStorage.removeItem("email");
         }
-    
-    finally{
-        
-        setOtpDialogOpen(false);
-    }
     }
     const onSubmit: SubmitHandler<FormData> = async (data) => {
         setIsLoading(true);
         try {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, data);
-            localStorage.setItem("email",data.email)
+            localStorage.setItem("email", data.email)
             setOtpDialogOpen(true);
         } catch (error) {
             const axiosError = error as AxiosError<{ message: string }>;
@@ -147,7 +143,7 @@ const axiosError = err as AxiosError<{ message: string }>;
                                     {...register('first_name', { required: 'First name is required' })}
                                     className="bg-white/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800 focus:ring-cyan-500 dark:focus:ring-cyan-600"
                                 />
-                                {errors.first_name && (
+                                {errors?.first_name && (
                                     <p className="text-sm text-red-600">{errors.first_name.message}</p>
                                 )}
                             </div>
@@ -165,7 +161,7 @@ const axiosError = err as AxiosError<{ message: string }>;
                                     {...register('last_name', { required: 'Last name is required' })}
                                     className="bg-white/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800 focus:ring-cyan-500 dark:focus:ring-cyan-600"
                                 />
-                                {errors.last_name && (
+                                {errors?.last_name && (
                                     <p className="text-sm text-red-600">{errors.last_name.message}</p>
                                 )}
                             </div>
@@ -192,7 +188,7 @@ const axiosError = err as AxiosError<{ message: string }>;
                                 })}
                                 className="bg-white/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800 focus:ring-cyan-500 dark:focus:ring-cyan-600"
                             />
-                            {errors.email && (
+                            {errors?.email && (
                                 <p className="text-sm text-red-600">{errors.email.message}</p>
                             )}
                         </div>
@@ -218,7 +214,7 @@ const axiosError = err as AxiosError<{ message: string }>;
                                 })}
                                 className="bg-white/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800 focus:ring-cyan-500 dark:focus:ring-cyan-600"
                             />
-                            {errors.password && (
+                            {errors?.password && (
                                 <p className="text-sm text-red-600">{errors.password.message}</p>
                             )}
                         </div>
@@ -257,18 +253,18 @@ const axiosError = err as AxiosError<{ message: string }>;
                     <DialogHeader>
                         <DialogTitle className="text-2xl font-bold text-slate-900 dark:text-white">Enter OTP</DialogTitle>
                         <DialogDescription className="text-slate-600 dark:text-slate-400">
-                            Please enter the 6-digit code sent to your email.
+                            Please enter the 4-digit code sent to your email.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="flex justify-center py-4">
-                        <OTPInput length={6} onComplete={onOtpComplete} />
+                        <OTPInput length={4} onComplete={onOtpComplete} />
                     </div>
-                    <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-                        Didn't receive the code?{' '}
+                    {/* <p className="text-center text-sm text-slate-600 dark:text-slate-400">
+                        Didn&apos;t receive the code?{' '}
                         <Button variant="link" className="p-0 h-auto text-cyan-600 dark:text-cyan-500 hover:underline">
                             Resend
                         </Button>
-                    </p>
+                    </p> */}
                 </DialogContent>
             </Dialog>
         </>

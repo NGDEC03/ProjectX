@@ -45,7 +45,9 @@ export function OTPInput({ length, onComplete }: OTPInputProps) {
           inputMode="numeric"
           maxLength={1}
           value={data}
-          ref={el => inputRefs.current[index] = el}
+          ref={el => {
+            inputRefs.current[index] = el;
+          }}
           onChange={(e) => handleChange(e.target, index)}
           onKeyDown={(e) => handleKeyDown(e, index)}
           className="w-12 h-12 text-center text-lg bg-white/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800 focus:ring-cyan-500 dark:focus:ring-cyan-600"
