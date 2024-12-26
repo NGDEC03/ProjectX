@@ -1,9 +1,19 @@
 'use client';
-import { Laptop, Home, Settings, GitBranch, Award, MessageCircle } from 'lucide-react';
+import { Laptop, Home, Settings, GitBranch, Award, MessageCircle, KeySquare, LogOutIcon } from 'lucide-react';
 import { ModeToggle } from '@/components/ui/ModeToggle';
 import Link from 'next/link';
+import { useUser } from '@/context/userContext';
+import Axios  from 'axios';
 
-const Navbar = () => {    
+const Navbar = () => {   
+    const {user,updateUser}=useUser()
+    const handleLogin=async ()=>{
+       if(user){
+        const response=await Axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signout`,{
+            withCredentials:true
+        })
+       }
+    } 
     return (
         <div className="fixed z-50 top-5 w-full px-6">
             <nav className="max-w-7xl mx-auto relative backdrop-blur-sm rounded-full border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 shadow-lg shadow-slate-200/20 dark:shadow-slate-900/30 p-4">
@@ -30,10 +40,12 @@ const Navbar = () => {
                             { icon: GitBranch, label: 'Leaderboard' },
                             { icon: Award, label: 'Rewards' },
                             { icon: MessageCircle, label: 'Community' },
+                            {icon:user?LogOutIcon:KeySquare,label:user?'Logout':'Login',link:'/auth/signin',onClick:handleLogin}
                         ].map((item, index) => (
                             <Link
                                 key={index}
-                                href="#"
+                            onClick={item.onClick?item.onClick:()=>{}}
+                                href={item.link?item.link:'#'}
                                 className="flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all hover:scale-105"
                             >
                                 <item.icon className="w-4 h-4" />
