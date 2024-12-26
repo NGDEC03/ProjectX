@@ -49,7 +49,7 @@ const SignInForm = () => {
       const axiosError = error as AxiosError<{ message: string }>;
       toast({
         title: 'Error',
-        description: axiosError.message,
+        description: axiosError.response?.data.message || 'An error occurred',
         duration: 3000,
         variant: 'destructive',
       });

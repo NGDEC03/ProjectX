@@ -3,17 +3,36 @@ import { Laptop, Home, Settings, GitBranch, Award, MessageCircle, KeySquare, Log
 import { ModeToggle } from '@/components/ui/ModeToggle';
 import Link from 'next/link';
 import { useUser } from '@/context/userContext';
-import Axios  from 'axios';
+import axios, { AxiosError } from 'axios';
+import { useToast } from '@/hooks/use-toast';
 
-const Navbar = () => {   
-    const {user,updateUser}=useUser()
-    const handleLogin=async ()=>{
-       if(user){
-        const response=await Axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signout`,{
-            withCredentials:true
-        })
-       }
-    } 
+const Navbar = () => {
+    const { user, setUser } = useUser();
+    const { toast } = useToast();
+    const handleLogin = async () => {
+        if (user) {
+            try {
+                await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/signout`, {
+                    withCredentials: true
+                });
+                setUser(null);
+                toast({
+                    title: 'Success',
+                    description: 'You have been signed out',
+                    duration: 3000
+                });
+            } catch (error) {
+                const axiosError = error as AxiosError<{ message: string }>;
+                toast({
+                    title: 'Error',
+                    description: axiosError.response?.data.message || 'An error occurred',
+                    variant: 'destructive',
+                    duration: 3000
+                });
+                console.error('Error during sign out:', error);
+            }
+        }
+    }
     return (
         <div className="fixed z-50 top-5 w-full px-6">
             <nav className="max-w-7xl mx-auto relative backdrop-blur-sm rounded-full border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 shadow-lg shadow-slate-200/20 dark:shadow-slate-900/30 p-4">
@@ -29,7 +48,7 @@ const Navbar = () => {
                     >
                         <Laptop className="w-6 h-6" />
                         <span className="text-xl font-semibold bg-gradient-to-r from-cyan-500 to-emerald-500 dark:from-cyan-400 dark:to-emerald-400 bg-clip-text text-transparent">
-                            ProjectX
+                            {user?.FirstName || 'CodeStrike'}
                         </span>
                     </Link>
 
@@ -40,12 +59,12 @@ const Navbar = () => {
                             { icon: GitBranch, label: 'Leaderboard' },
                             { icon: Award, label: 'Rewards' },
                             { icon: MessageCircle, label: 'Community' },
-                            {icon:user?LogOutIcon:KeySquare,label:user?'Logout':'Login',link:'/auth/signin',onClick:handleLogin}
+                            { icon: user ? LogOutIcon : KeySquare, label: user ? 'Logout' : 'Login', link: '/auth/signin', onClick: handleLogin }
                         ].map((item, index) => (
                             <Link
                                 key={index}
-                            onClick={item.onClick?item.onClick:()=>{}}
-                                href={item.link?item.link:'#'}
+                                onClick={item.onClick ? item.onClick : () => { }}
+                                href={item.link ? item.link : '#'}
                                 className="flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all hover:scale-105"
                             >
                                 <item.icon className="w-4 h-4" />

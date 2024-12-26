@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 interface Context {
     user: User | null;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
-    updateUser: () => void;
+    updateUser: () => void | null;
 }
 
 const userContext = createContext<Context | undefined>(undefined);
@@ -27,7 +27,8 @@ function UserContext({ children }: { children: React.ReactNode }) {
             }
         } catch (error) {
             const axiosError = error as AxiosError<{ message: string }>;
-            console.error("Error fetching user:", axiosError.message);
+            setUser(null);
+            console.error("Error fetching user:", axiosError.response?.data.message || "An error occurred");
         }
     };
 
