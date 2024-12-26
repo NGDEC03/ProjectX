@@ -1,17 +1,17 @@
 "use client"
 
-import { useState } from 'react'
-import { useUser } from '@/context/userContext'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { useToast } from "@/components/ui/toast"
-import { Loader2 } from 'lucide-react'
-import { Toast } from "@/components/ui/toast"
+import { useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { useUser } from '@/context/userContext';
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 type ProfileFormData = {
   FirstName: string
@@ -27,7 +27,7 @@ export default function ProfileEditContent() {
   const { user, updateUser } = useUser()
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const {
     register,
@@ -42,25 +42,25 @@ export default function ProfileEditContent() {
       Email: user?.Email || "",
       Image: user?.Image || "",
       Phone: user?.Phone || "",
-      Gender: user?.Gender,
+      Gender: user?.Gender as 'male' | 'female' | 'other' | undefined,
     },
   })
 
-  const onSubmit: SubmitHandler<ProfileFormData> = async (data) => {
+  const onSubmit: SubmitHandler<ProfileFormData> = async () => {
     setIsLoading(true)
     try {
       // Simulating API call
       await new Promise(resolve => setTimeout(resolve, 1000))
-      
+
       // Update user context
-      updateUser(data)
-      
+      updateUser();
       toast({
         title: "Profile updated",
         description: "Your profile has been successfully updated.",
       })
       setIsEditing(false)
     } catch (error) {
+      console.log(error)
       toast({
         title: "Error",
         description: "There was an error updating your profile. Please try again.",
@@ -126,7 +126,7 @@ export default function ProfileEditContent() {
                 id="Email"
                 type="email"
                 placeholder={user?.Email}
-                {...register("Email", { 
+                {...register("Email", {
                   required: "Email is required",
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -161,7 +161,7 @@ export default function ProfileEditContent() {
               <Label htmlFor="Image">Profile Image URL</Label>
               <Input
                 id="Image"
-                placeholder={user?.Image?user.Image:"Paste your image url"}
+                placeholder={user?.Image ? user.Image : "Paste your image url"}
                 {...register("Image", {
                   pattern: {
                     value: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
@@ -178,7 +178,7 @@ export default function ProfileEditContent() {
               <Label htmlFor="Phone">Phone</Label>
               <Input
                 id="Phone"
-                placeholder={user?.Phone?user.Phone:"Enter phone"}
+                placeholder={user?.Phone ? user.Phone : "Enter phone"}
                 {...register("Phone")}
                 disabled={!isEditing}
               />
@@ -188,14 +188,14 @@ export default function ProfileEditContent() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="Gender">Gender</Label>
-              <Select 
-              
+              <Select
+
                 onValueChange={(value) => setValue("Gender", value as 'male' | 'female' | 'other')}
                 defaultValue={user?.Gender}
                 disabled={!isEditing}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={user?.Gender?user.Gender:"Select gender" }/>
+                  <SelectValue placeholder={user?.Gender ? user.Gender : "Select gender"} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="male">Male</SelectItem>

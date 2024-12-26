@@ -9,10 +9,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
-    const router=useRouter()
+    const router = useRouter()
     const { user, setUser } = useUser();
     const { toast } = useToast();
-    const handleLogin = async () => {
+
+    const handleLogout = async () => {
         if (user) {
             try {
                 await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/signout`, {
@@ -62,7 +63,7 @@ const Navbar = () => {
                             { icon: GitBranch, label: 'Leaderboard' },
                             { icon: Award, label: 'Rewards' },
                             { icon: MessageCircle, label: 'Community' },
-                            { icon: user ? LogOutIcon : KeySquare, label: user ? 'Logout' : 'Login', link: '/auth/signin', onClick: handleLogin }
+                            { icon: user ? LogOutIcon : KeySquare, label: user ? 'Logout' : 'Login', link: '/auth/signin', onClick:handleLogout }
                         ].map((item, index) => (
                             <Link
                                 key={index}
@@ -74,16 +75,18 @@ const Navbar = () => {
                                 <span className="text-sm font-medium">{item.label}</span>
                             </Link>
                         ))}
-                      
-                             {
-                                user?  <Avatar onClick={()=>{
+
+                        <div className='cursor-pointer rounded-full h-6 w-6' >
+                            {
+                                user ? <Avatar onClick={() => {
                                     router.push('/profile')
                                 }}>
-                                 <AvatarImage src={user?.Image?user.Image:'#'}></AvatarImage>
-                                 <AvatarFallback className='rounded-full bg-slate-600 text-white p-2'>{user?.FirstName?user.FirstName:"NG"}</AvatarFallback>
-                                </Avatar>:''
-                             }
-                           
+                                    <AvatarImage src={user?.Image ? user.Image : '#'}></AvatarImage>
+                                    <AvatarFallback className='rounded-full bg-slate-600 text-white p-2'>{user?.FirstName ? user.FirstName.substring(0, 1) : "U"}</AvatarFallback>
+                                </Avatar> : ''
+                            }
+                        </div>
+
                         <div className="pl-2 border-l border-slate-200 dark:border-slate-800">
                             <ModeToggle />
                         </div>
