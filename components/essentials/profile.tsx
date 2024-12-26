@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import ProfilePicture from './profilePicture';
 
 type ProfileFormData = {
   FirstName: string
@@ -92,6 +93,7 @@ export default function ProfileEditContent() {
             <Label htmlFor="edit-mode">Edit Mode</Label>
           </div>
         </CardHeader>
+        <ProfilePicture />
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
