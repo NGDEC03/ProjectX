@@ -3,7 +3,7 @@
 import * as React from "react"
 import * as ToastPrimitives from "@radix-ui/react-toast"
 import { cva, type VariantProps } from "class-variance-authority"
-import { X } from "lucide-react"
+import { X } from 'lucide-react'
 
 import { cn } from "@/lib/utils"
 
@@ -127,3 +127,18 @@ export {
   ToastClose,
   ToastAction,
 }
+
+export function useToast() {
+  const [toasts, setToasts] = React.useState<ToastProps[]>([])
+
+  const toast = React.useCallback(({ ...props }: ToastProps) => {
+    setToasts((prevToasts) => [...prevToasts, { ...props, id: Date.now().toString() }])
+  }, [])
+
+  const dismissToast = React.useCallback((id: string) => {
+    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id))
+  }, [])
+
+  return { toast, dismissToast, toasts }
+}
+

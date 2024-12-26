@@ -5,8 +5,11 @@ import Link from 'next/link';
 import { useUser } from '@/context/userContext';
 import axios, { AxiosError } from 'axios';
 import { useToast } from '@/hooks/use-toast';
+import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
+    const router=useRouter()
     const { user, setUser } = useUser();
     const { toast } = useToast();
     const handleLogin = async () => {
@@ -71,6 +74,16 @@ const Navbar = () => {
                                 <span className="text-sm font-medium">{item.label}</span>
                             </Link>
                         ))}
+                      
+                             {
+                                user?  <Avatar onClick={()=>{
+                                    router.push('/profile')
+                                }}>
+                                 <AvatarImage src={user?.Image?user.Image:'#'}></AvatarImage>
+                                 <AvatarFallback className='rounded-full bg-slate-600 text-white p-2'>{user?.FirstName?user.FirstName:"NG"}</AvatarFallback>
+                                </Avatar>:''
+                             }
+                           
                         <div className="pl-2 border-l border-slate-200 dark:border-slate-800">
                             <ModeToggle />
                         </div>
