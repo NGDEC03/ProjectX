@@ -42,7 +42,7 @@ export default function ProfileEditContent() {
       Email: user?.Email || "",
       Image: user?.Image || "",
       Phone: user?.Phone || "",
-      Gender: user?.Gender
+      Gender: user?.Gender,
     },
   })
 
@@ -80,7 +80,7 @@ export default function ProfileEditContent() {
 
   return (
     <div className="container mx-auto p-6 mt-24">
-      <Card className="w-full  max-w-9xl mx-auto bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm">
+      <Card className="w-full max-w-2xl mx-auto bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold">Edit Profile</CardTitle>
           <div className="flex items-center space-x-2">
@@ -99,6 +99,7 @@ export default function ProfileEditContent() {
                 <Label htmlFor="FirstName">First Name</Label>
                 <Input
                   id="FirstName"
+                  placeholder={user?.FirstName}
                   {...register("FirstName", { required: "First name is required" })}
                   disabled={!isEditing}
                 />
@@ -110,6 +111,7 @@ export default function ProfileEditContent() {
                 <Label htmlFor="LastName">Last Name</Label>
                 <Input
                   id="LastName"
+                  placeholder={user?.LastName}
                   {...register("LastName", { required: "Last name is required" })}
                   disabled={!isEditing}
                 />
@@ -123,6 +125,7 @@ export default function ProfileEditContent() {
               <Input
                 id="Email"
                 type="email"
+                placeholder={user?.Email}
                 {...register("Email", { 
                   required: "Email is required",
                   pattern: {
@@ -158,6 +161,7 @@ export default function ProfileEditContent() {
               <Label htmlFor="Image">Profile Image URL</Label>
               <Input
                 id="Image"
+                placeholder={user?.Image?user.Image:"Paste your image url"}
                 {...register("Image", {
                   pattern: {
                     value: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
@@ -174,6 +178,7 @@ export default function ProfileEditContent() {
               <Label htmlFor="Phone">Phone</Label>
               <Input
                 id="Phone"
+                placeholder={user?.Phone?user.Phone:"Enter phone"}
                 {...register("Phone")}
                 disabled={!isEditing}
               />
@@ -183,13 +188,14 @@ export default function ProfileEditContent() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="Gender">Gender</Label>
-              <Select
+              <Select 
+              
                 onValueChange={(value) => setValue("Gender", value as 'male' | 'female' | 'other')}
                 defaultValue={user?.Gender}
                 disabled={!isEditing}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select gender" />
+                  <SelectValue placeholder={user?.Gender?user.Gender:"Select gender" }/>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="male">Male</SelectItem>
