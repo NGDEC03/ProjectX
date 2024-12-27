@@ -160,23 +160,6 @@ export default function ProfileEditContent() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="Image">Profile Image URL</Label>
-              <Input
-                id="Image"
-                placeholder={user?.Image ? user.Image : "Paste your image url"}
-                {...register("Image", {
-                  pattern: {
-                    value: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
-                    message: "Invalid URL"
-                  }
-                })}
-                disabled={!isEditing}
-              />
-              {errors.Image && (
-                <p className="text-sm text-red-500">{errors.Image.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
               <Label htmlFor="Phone">Phone</Label>
               <Input
                 id="Phone"
