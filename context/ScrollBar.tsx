@@ -20,48 +20,48 @@ export function ScrollBarProps({ children }: { children: React.ReactNode }) {
 
                     /* Handle/thumb styles */
                     ::-webkit-scrollbar-thumb {
-                        background: rgb(var(--foreground-rgb) / 0.2);
+                        background: linear-gradient(to bottom, rgb(6 182 212 / 0.3), rgb(16 185 129 / 0.3));
                         border-radius: 12px;
-                        transition: background-color 0.2s ease;
+                        transition: all 0.2s ease;
                     }
 
                     /* Handle on hover */
                     ::-webkit-scrollbar-thumb:hover {
-                        background: rgb(var(--foreground-rgb) / 0.3);
+                        background: linear-gradient(to bottom, rgb(6 182 212 / 0.4), rgb(16 185 129 / 0.4));
                     }
 
                     /* Handle when active/being dragged */
                     ::-webkit-scrollbar-thumb:active {
-                        background: rgb(var(--foreground-rgb) / 0.4);
+                        background: linear-gradient(to bottom, rgb(6 182 212 / 0.5), rgb(16 185 129 / 0.5));
                     }
 
-                    /* Corner styles where horizontal and vertical scrollbars meet */
+                    /* Corner styles */
                     ::-webkit-scrollbar-corner {
                         background: transparent;
                     }
 
-                    /* For Firefox */
+                    /* Firefox support */
                     html {
                         scrollbar-width: thin;
-                        scrollbar-color: rgb(var(--foreground-rgb) / 0.2) transparent;
+                        scrollbar-color: rgb(6 182 212 / 0.3) transparent;
                     }
 
                     /* Dark mode adjustments */
                     @media (prefers-color-scheme: dark) {
                         ::-webkit-scrollbar-thumb {
-                            background: rgb(var(--foreground-rgb) / 0.3);
+                            background: linear-gradient(to bottom, rgb(8 145 178 / 0.4), rgb(16 185 129 / 0.4));
                         }
 
                         ::-webkit-scrollbar-thumb:hover {
-                            background: rgb(var(--foreground-rgb) / 0.4);
+                            background: linear-gradient(to bottom, rgb(8 145 178 / 0.5), rgb(16 185 129 / 0.5));
                         }
 
                         ::-webkit-scrollbar-thumb:active {
-                            background: rgb(var(--foreground-rgb) / 0.5);
+                            background: linear-gradient(to bottom, rgb(8 145 178 / 0.6), rgb(16 185 129 / 0.6));
                         }
                     }
 
-                    /* Optional: Hide scrollbar when not hovering */
+                    /* Optional: Hide scrollbar until hover */
                     .hide-scrollbar-until-hover {
                         scrollbar-width: none;
                     }

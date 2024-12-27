@@ -1,5 +1,5 @@
 'use client';
-import { Laptop, Home, Settings, GitBranch, Award, MessageCircle, KeySquare, LogOutIcon } from 'lucide-react';
+import {  Home, Settings, GitBranch, Award, MessageCircle, KeySquare, LogOutIcon } from 'lucide-react';
 import { ModeToggle } from '@/components/ui/ModeToggle';
 import Link from 'next/link';
 import { useUser } from '@/context/userContext';
@@ -7,6 +7,7 @@ import axios, { AxiosError } from 'axios';
 import { useToast } from '@/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const Navbar = () => {
     const router = useRouter()
@@ -50,7 +51,15 @@ const Navbar = () => {
                         href={'/'}
                         className="flex items-center gap-2 text-slate-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                     >
-                        <Laptop className="w-6 h-6" />
+                        <Image
+                            src={'/icon.webp'}
+                            alt='Icon'
+                            width={24}
+                            height={24}
+                            unoptimized
+                            fetchPriority='high'
+                            loading='eager'
+                            className="w-6 h-6" />
                         <span className="text-xl font-semibold bg-gradient-to-r from-cyan-500 to-emerald-500 dark:from-cyan-400 dark:to-emerald-400 bg-clip-text text-transparent">
                             {user?.FirstName || 'CodeStrike'}
                         </span>
@@ -63,7 +72,7 @@ const Navbar = () => {
                             { icon: GitBranch, label: 'Leaderboard' },
                             { icon: Award, label: 'Rewards' },
                             { icon: MessageCircle, label: 'Community' },
-                            { icon: user ? LogOutIcon : KeySquare, label: user ? 'Logout' : 'Login', link: '/auth/signin', onClick:handleLogout }
+                            { icon: user ? LogOutIcon : KeySquare, label: user ? 'Logout' : 'Login', link: '/auth/signin', onClick: handleLogout }
                         ].map((item, index) => (
                             <Link
                                 key={index}
