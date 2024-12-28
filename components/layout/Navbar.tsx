@@ -1,5 +1,5 @@
 'use client';
-import {  Home, Settings, GitBranch, Award, MessageCircle, KeySquare, LogOutIcon } from 'lucide-react';
+import {  Home, Settings, GitBranch, KeySquare, LogOutIcon } from 'lucide-react';
 import { ModeToggle } from '@/components/ui/ModeToggle';
 import Link from 'next/link';
 import { useUser } from '@/context/userContext';
@@ -67,11 +67,11 @@ const Navbar = () => {
 
                     <div className="hidden md:flex items-center gap-8">
                         {[
-                            { icon: Home, label: 'Home' },
-                            { icon: Settings, label: 'Contests' },
-                            { icon: GitBranch, label: 'Leaderboard' },
-                            { icon: Award, label: 'Rewards' },
-                            { icon: MessageCircle, label: 'Community' },
+                            { icon: Home, label: 'Home', link: '/' },
+                            { icon: Settings, label: 'Dashboard', link: '/dashboard' },
+                            { icon: GitBranch, label: 'Leaderboard' , link: '/dashboard' },
+                            // { icon: Award, label: 'Rewards' , link: '/' },
+                            // { icon: MessageCircle, label: 'Community' , link: '/' },
                             { icon: user ? LogOutIcon : KeySquare, label: user ? 'Logout' : 'Login', link: '/auth/signin', onClick: handleLogout }
                         ].map((item, index) => (
                             <Link
