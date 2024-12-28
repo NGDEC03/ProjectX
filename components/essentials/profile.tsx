@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import ProfilePicture from './profilePicture';
+import axios, { AxiosError } from 'axios';
 
 type ProfileFormData = {
   FirstName: string
@@ -21,7 +22,7 @@ type ProfileFormData = {
   Password?: string
   Image?: string
   Phone?: string
-  Gender?: 'male' | 'female' | 'other'
+  Gender?: 'Male' | 'Female' | 'Other'
 }
 
 export default function ProfileEditContent() {
@@ -43,17 +44,23 @@ export default function ProfileEditContent() {
       Email: user?.Email || "",
       Image: user?.Image || "",
       Phone: user?.Phone || "",
-      Gender: user?.Gender as 'male' | 'female' | 'other' | undefined,
+      Gender: user?.Gender as 'Male' | 'Female' | 'Other' | undefined,
     },
   })
 
-  const onSubmit: SubmitHandler<ProfileFormData> = async () => {
+  const onSubmit: SubmitHandler<ProfileFormData> = async (data : ProfileFormData) => {
     setIsLoading(true)
     try {
-      // Simulating API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const dataToUpdate = {
+        first_name : data.FirstName || user?.FirstName,
+        last_name : data.LastName || user?.LastName,
+        email : user?.Email,
+        phone : data.Phone || user?.Phone,
+        password : data.Password ? data.Password : "",
+        gender : data.Gender || user?.Gender,
+      };
 
-      // Update user context
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/update-details`, dataToUpdate)
       updateUser();
       toast({
         title: "Profile updated",
@@ -61,10 +68,11 @@ export default function ProfileEditContent() {
       })
       setIsEditing(false)
     } catch (error) {
+      const axiosError = error as AxiosError<{message : string}>;
       console.log(error)
       toast({
         title: "Error",
-        description: "There was an error updating your profile. Please try again.",
+        description: axiosError.response?.data.message || "An error occurred",
         variant: "destructive",
       })
     } finally {
@@ -102,7 +110,8 @@ export default function ProfileEditContent() {
                 <Input
                   id="FirstName"
                   placeholder={user?.FirstName}
-                  {...register("FirstName", { required: "First name is required" })}
+                  defaultValue={user?.FirstName}
+                  {...register("FirstName")}
                   disabled={!isEditing}
                 />
                 {errors.FirstName && (
@@ -114,7 +123,8 @@ export default function ProfileEditContent() {
                 <Input
                   id="LastName"
                   placeholder={user?.LastName}
-                  {...register("LastName", { required: "Last name is required" })}
+                  defaultValue={user?.LastName}
+                  {...register("LastName")}
                   disabled={!isEditing}
                 />
                 {errors.LastName && (
@@ -128,8 +138,9 @@ export default function ProfileEditContent() {
                 id="Email"
                 type="email"
                 placeholder={user?.Email}
+                defaultValue={user?.Email}
+                value={user?.Email}
                 {...register("Email", {
-                  required: "Email is required",
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                     message: "Invalid email address"
@@ -164,6 +175,7 @@ export default function ProfileEditContent() {
               <Input
                 id="Phone"
                 placeholder={user?.Phone ? user.Phone : "Enter phone"}
+                defaultValue={user?.Phone}
                 {...register("Phone")}
                 disabled={!isEditing}
               />
@@ -174,8 +186,7 @@ export default function ProfileEditContent() {
             <div className="space-y-2">
               <Label htmlFor="Gender">Gender</Label>
               <Select
-
-                onValueChange={(value) => setValue("Gender", value as 'male' | 'female' | 'other')}
+                onValueChange={(value) => setValue("Gender", value as 'Male' | 'Female' | 'Other')}
                 defaultValue={user?.Gender}
                 disabled={!isEditing}
               >
@@ -183,9 +194,9 @@ export default function ProfileEditContent() {
                   <SelectValue placeholder={user?.Gender ? user.Gender : "Select gender"} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="Male">Male</SelectItem>
+                  <SelectItem value="Female">Female</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
                 </SelectContent>
               </Select>
               {errors.Gender && (

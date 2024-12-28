@@ -1,13 +1,14 @@
 'use client';
 
+import Image from "next/image";
+import axios, { AxiosError } from "axios";
+import { useEffect, useRef, useState } from "react";
+
 import { useUser } from "@/context/userContext";
 import { useToast } from "@/hooks/use-toast";
-import axios, { AxiosError } from "axios";
-import { Loader2, Pencil } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Check, Loader2, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import Image from "next/image";
 
 export default function ProfilePicture() {
 
@@ -26,12 +27,19 @@ export default function ProfilePicture() {
     }
 
     useEffect(() => {
-        setImage(user?.Image || null);
         setImagePreview(user?.Image || null);
         console.log(user)
     }, [user]);
 
     const handleImageUpload = async () => {
+        if (!image)  {
+            toast({
+                title: "Error",
+                description: "Please select an image to upload.",
+                variant: "destructive",
+            });
+            return;
+        }
         try {
             if (user?.Email && image) {
                 setIsUploading(true);
@@ -71,8 +79,16 @@ export default function ProfilePicture() {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
+        if (file && file?.size > 1024 * 1024) {
+            toast({
+                title: "Error",
+                description: "Image size should be less than 1MB.",
+                variant: "destructive",
+            });
+            return;
+        }
         setImage(file);
-
+        
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -114,7 +130,7 @@ export default function ProfilePicture() {
                     hidden
                 />
             </div>
-            <Button onClick={handleImageUpload}>{isUploading ? "Saving" : "Save"}</Button>
+            <Button onClick={handleImageUpload} disabled={isUploading}><Check /></Button>
         </div>
     )
 }
