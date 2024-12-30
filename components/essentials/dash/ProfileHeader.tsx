@@ -17,7 +17,7 @@ const ProfileHeader = ({ user }: { user: User }) => {
                     <Bell className="h-4 w-4" />
                 </Button>
                 <Avatar>
-                    <AvatarImage src={user?.Image} alt="@shadcn" />
+                    <AvatarImage src={user?.Image} alt={user?.FirstName} />
                     <AvatarFallback>CS</AvatarFallback>
                 </Avatar>
             </div>

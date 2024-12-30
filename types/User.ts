@@ -1,144 +1,139 @@
-
 export interface User {
-	id: number;
-	firstName: string;
-	lastName: string;
-	email: string;
-	password: string;
-	image?: string;
-	phone?: string;
-	gender?: string;
-	sessionToken?: string;
-	verifyToken?: string;
-	isVerified: boolean;
-	lastLogin: Date;
-	currentRating: number;
-	maxRating: number;
-	minRating: number;
-	globalRank?: number;
-	totalContests: number;
-	contestsWon: number;
-	totalSubmissions: number;
-	totalSolved: number;
-	currentStreak: number;
-	maxStreak: number;
-	lastProblemSolved?: Date;
-	createdAt: Date;
-	updatedAt: Date;
-	deletedAt?: Date | null;
-	contests: Contest[];
-	submissions: Submission[];
-	contestCreated: Contest[];
-	ratingHistory: RatingChange[];
+    ID: number;
+    FirstName: string;
+    LastName: string;
+    Email: string;
+    Password: string;
+    Image?: string;
+    Phone?: string;
+    Gender?: string;
+    SessionToken?: string;
+    VerifyToken?: string;
+    IsVerified: boolean;
+    LastLogin: Date;
+    CurrentRating: number;
+    MaxRating: number;
+    MinRating: number;
+    GlobalRank?: number;
+    TotalContests: number;
+    ContestsWon: number;
+    TotalSubmissions: number;
+    TotalSolved: number;
+    CurrentStreak: number;
+    MaxStreak: number;
+    LastProblemSolved?: Date;
+    CreatedAt: Date;
+    UpdatedAt: Date;
+    DeletedAt?: Date | null;
+    Contests: Contest[];
+    Submissions: Submission[];
+    ContestCreated: Contest[];
+    RatingHistory: RatingChange[];
 }
 
 export interface Contest {
-	id: number;
-	name: string;
-	description?: string;
-	startTime: Date;
-	endTime: Date;
-	isPublic: boolean;
-	maxDuration?: number;
-	creatorId: number;
-	status: 'pending' | 'active' | 'completed';
-	ratingFloor?: number;
-	ratingCeil?: number;
-	isRated: boolean;
-	ratingType: 'standard' | 'performance' | 'random';
-	ratingKFactor: number;
-	createdAt: Date;
-	updatedAt: Date;
-	deletedAt?: Date | null;
-	problems: Problem[];
-	users: User[];
-	creator: User;
+    ID: number;
+    Name: string;
+    Description?: string;
+    StartTime: Date;
+    EndTime: Date;
+    IsPublic: boolean;
+    MaxDuration: number;
+    CreatorID: number;
+    Status: string;
+    RatingFloor: number;
+    RatingCeil: number;
+    IsRated: boolean;
+    RatingType: string;
+    RatingKFactor: number;
+    CreatedAt: Date;
+    UpdatedAt: Date;
+    DeletedAt?: Date | null;
+    Problems: Problem[];
+    Users: User[];
+    Creator: User;
 }
 
 export interface RatingChange {
-	id: number;
-	userId: number;
-	contestId: number;
-	oldRating: number;
-	newRating: number;
-	rank: number;
-	performance: number;
-	volatility?: number;
-	changeTime: Date;
-	user: User;
-	contest: Contest;
+    ID: number;
+    UserID: number;
+    ContestID: number;
+    OldRating: number;
+    NewRating: number;
+    Rank: number;
+    Performance: number;
+    Volatility?: number;
+    ChangeTime: Date;
+    User: User;
+    Contest: Contest;
 }
-
 
 export interface UserContest {
-	userId: number;
-	contestId: number;
-	score: number;
-	rank: number;
-	startTime: Date;
-	endTime: Date;
-	status: 'registered' | 'started' | 'finished';
-	initialRating: number;
-	ratingChange: number;
-	performance: number;
-	expectedRank: number;
-	volatility: number;
-	createdAt: Date;
-	updatedAt: Date;
-	user: User;
-	contest: Contest;
+    UserID: number;
+    ContestID: number;
+    Score: number;
+    Rank: number;
+    StartTime: Date;
+    EndTime: Date;
+    Status: string;
+    InitialRating: number;
+    RatingChange: number;
+    Performance: number;
+    ExpectedRank: number;
+    Volatility: number;
+    CreatedAt: Date;
+    UpdatedAt: Date;
+    User: User;
+    Contest: Contest;
 }
-
 
 export interface Problem {
-	id: number;
-	contestId: number;
-	title: string;
-	description: string;
-	timeLimit: number;
-	memoryLimit: number;
-	difficulty?: 'easy' | 'medium' | 'hard';
-	score: number;
-	rating: number;
-	sampleInput?: string;
-	sampleOutput?: string;
-	testCasesCount: number;
-	totalSubmissions: number;
-	successfulSubmissions: number;
-	createdAt: Date;
-	updatedAt: Date;
-	deletedAt?: Date | null;
-	contest: Contest;
-	submissions: Submission[];
-	testCases: TestCase[];
+    ID: number;
+    ContestID: number;
+    Title: string;
+    Description: string;
+    TimeLimit: number;
+    MemoryLimit: number;
+    Difficulty?: string;
+    Score: number;
+    Rating: number;
+    SampleInput?: string;
+    SampleOutput?: string;
+    TestCasesCount: number;
+    TotalSubmissions: number;
+    SuccessfulSubmissions: number;
+    CreatedAt: Date;
+    UpdatedAt: Date;
+    DeletedAt?: Date | null;
+    Contest: Contest;
+    Submissions: Submission[];
+    TestCases: TestCase[];
 }
-
-
 
 export interface TestCase {
-	id: number;
-	problemId: number;
-	input: string;
-	output: string;
-	isHidden: boolean;
-	createdAt: Date;
-	updatedAt: Date;
-	problem: Problem;
+    ID: number;
+    ProblemID: number;
+    Input: string;
+    Output: string;
+    IsHidden: boolean;
+    CreatedAt: Date;
+    UpdatedAt: Date;
+    Problem: Problem;
 }
 
-
-
 export interface Submission {
-	id: number;
-	userId: number;
-	problemId: number;
-	language: string;
-	code: string;
-	status: string;
-	score?: number;
-	runtime?: number;
-	memory?: number;
-	submittedAt: Date;
-	user: User;
-	problem: Problem;
+    ID: number;
+    UserID: number;
+    ProblemID: number;
+    Language: string;
+    Code: string;
+    Status: string;
+    Score: number;
+    Runtime: number;
+    Memory: number;
+    SubmittedAt: Date;
+    CreatedAt: Date;
+    UpdatedAt: Date;
+    User: User;
+    Problem: Problem;
 }
