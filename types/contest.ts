@@ -1,10 +1,22 @@
 import { UseFormRegister, FieldErrors, Control, UseFieldArrayRemove } from 'react-hook-form';
+import { User } from './User';
 
 export type TestCase = {
   input: string;
   output: string;
   isHidden: boolean;
 };
+
+export interface Contest {
+  id: string
+  name: string
+  status: 'active' | 'pending' | 'completed'
+  startDate: string
+  endDate: string
+  participants: number
+}
+
+
 
 export type ProblemInput = {
   title: string;
@@ -22,17 +34,17 @@ export type ProblemInput = {
 export type ContestInput = {
   name: string;
   description: string;
-  startTime: string;
-  endTime: string;
-  isPublic: boolean;
-  maxDuration: number;
+  start_time: string;
+  end_time: string;
+  is_public: boolean;
+  creator_id:User['ID'];
+  max_duration: number;
   status: string;
-  ratingFloor: number;
-  ratingCeil: number;
-  isRated: boolean;
-  ratingType: string;
-  ratingKFactor: number;
-  problems: ProblemInput[];
+  rating_floor: number;
+  rating_ceil: number;
+  is_rated: boolean;
+  rating_type: string;
+  rating_k_factor: number;
 };
 
 export interface ContestDetailsProps {
