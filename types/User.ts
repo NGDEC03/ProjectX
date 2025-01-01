@@ -10,6 +10,7 @@ export interface User {
     SessionToken?: string;
     VerifyToken?: string;
     IsVerified: boolean;
+    IsAdmin:boolean;
     LastLogin: Date;
     CurrentRating: number;
     MaxRating: number;
