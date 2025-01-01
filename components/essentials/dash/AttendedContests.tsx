@@ -3,8 +3,8 @@ import AttendedContestItem from "./AttendContestItem"
 import { useUser } from "@/context/userContext"
 
 const AttendedContests = () => {
-    const {user,updateUser}=useUser()
-    const contests = user?.contests || [
+    const {user}=useUser()
+    const contests = user?.Contests|| [
         { name: "Data Incoming", date: "July 1, 2023", score: 950, maxScore: 1000, rank: 3 },
          ]
 
@@ -16,7 +16,14 @@ const AttendedContests = () => {
             <CardContent>
                 <div className="space-y-4">
                     {contests.map((contest, index) => (
-                        <AttendedContestItem key={index} {...contest}></AttendedContestItem>
+                        <AttendedContestItem 
+                            key={index} 
+                            contestName={contest.name} 
+                            startTime={contest.date} 
+                            score={contest.score} 
+                            rank={contest.rank} 
+                            status="Completed" 
+                        />
                     ))}
                 </div>
             </CardContent>

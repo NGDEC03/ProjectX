@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
+import { CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -45,7 +45,7 @@ const SignUpForm = () => {
                 description: 'Your account has been verified and created',
                 duration: 3000,
             });
-            router.push('/');
+            router.push('/auth/signin');
         }
         catch (err) {
             const axiosError = err as AxiosError<{ message: string }>;
@@ -88,7 +88,7 @@ const SignUpForm = () => {
 
     return (
         <>
-            <Card className="max-w-md mx-auto p-6 bg-white dark:bg-slate-900 rounded-lg shadow-lg">
+            <div className="max-w-md mx-auto p-6 bg-white dark:bg-slate-900 rounded-lg shadow-lg">
                 <CardHeader className="space-y-2 text-center">
                     <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
                         Create Account
@@ -246,7 +246,7 @@ const SignUpForm = () => {
                         </p>
                     </CardFooter>
                 </form>
-            </Card>
+            </div>
 
             <Dialog open={otpDialogOpen} onOpenChange={setOtpDialogOpen}>
                 <DialogContent className="sm:max-w-[425px] bg-white dark:bg-slate-900">

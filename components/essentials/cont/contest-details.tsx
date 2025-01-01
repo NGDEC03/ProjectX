@@ -18,21 +18,60 @@ export function ContestDetails({ register, errors }: ContestDetailsProps) {
         </div>
         <div>
           <Label htmlFor="description">Description</Label>
-          <Textarea id="description" {...register("description", { required: "Description is required" })} />
+          <Textarea id="description" {...register("description")} />
           {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
         </div>
         <div>
-          <Label htmlFor="startDate">Start Date</Label>
-          <Input id="startDate" type="datetime-local" {...register("startDate", { required: "Start date is required" })} />
-          {errors.startDate && <p className="text-red-500 text-sm mt-1">{errors.startDate.message}</p>}
+          <Label htmlFor="startTime">Start Time</Label>
+          <Input id="startTime" type="datetime-local" {...register("startTime", { required: "Start time is required" })} />
+          {errors.startTime && <p className="text-red-500 text-sm mt-1">{errors.startTime.message}</p>}
         </div>
         <div>
-          <Label htmlFor="endDate">End Date</Label>
-          <Input id="endDate" type="datetime-local" {...register("endDate", { required: "End date is required" })} />
-          {errors.endDate && <p className="text-red-500 text-sm mt-1">{errors.endDate.message}</p>}
+          <Label htmlFor="endTime">End Time</Label>
+          <Input id="endTime" type="datetime-local" {...register("endTime", { required: "End time is required" })} />
+          {errors.endTime && <p className="text-red-500 text-sm mt-1">{errors.endTime.message}</p>}
+        </div>
+        <div>
+          <Label htmlFor="isPublic">Is Public</Label>
+          <Input id="isPublic" type="checkbox" {...register("isPublic")} />
+          {errors.isPublic && <p className="text-red-500 text-sm mt-1">{errors.isPublic.message}</p>}
+        </div>
+        <div>
+          <Label htmlFor="maxDuration">Max Duration (minutes)</Label>
+          <Input id="maxDuration" type="number" {...register("maxDuration")} />
+          {errors.maxDuration && <p className="text-red-500 text-sm mt-1">{errors.maxDuration.message}</p>}
+        </div>
+        <div>
+          <Label htmlFor="status">Status</Label>
+          <Input id="status" {...register("status")} />
+          {errors.status && <p className="text-red-500 text-sm mt-1">{errors.status.message}</p>}
+        </div>
+        <div>
+          <Label htmlFor="ratingFloor">Rating Floor</Label>
+          <Input id="ratingFloor" type="number" {...register("ratingFloor")} />
+          {errors.ratingFloor && <p className="text-red-500 text-sm mt-1">{errors.ratingFloor.message}</p>}
+        </div>
+        <div>
+          <Label htmlFor="ratingCeil">Rating Ceil</Label>
+          <Input id="ratingCeil" type="number" {...register("ratingCeil")} />
+          {errors.ratingCeil && <p className="text-red-500 text-sm mt-1">{errors.ratingCeil.message}</p>}
+        </div>
+        <div>
+          <Label htmlFor="isRated">Is Rated</Label>
+          <Input id="isRated" type="checkbox" {...register("isRated")} />
+          {errors.isRated && <p className="text-red-500 text-sm mt-1">{errors.isRated.message}</p>}
+        </div>
+        <div>
+          <Label htmlFor="ratingType">Rating Type</Label>
+          <Input id="ratingType" {...register("ratingType")} />
+          {errors.ratingType && <p className="text-red-500 text-sm mt-1">{errors.ratingType.message}</p>}
+        </div>
+        <div>
+          <Label htmlFor="ratingKFactor">Rating K Factor</Label>
+          <Input id="ratingKFactor" type="number" {...register("ratingKFactor")} />
+          {errors.ratingKFactor && <p className="text-red-500 text-sm mt-1">{errors.ratingKFactor.message}</p>}
         </div>
       </CardContent>
     </Card>
   )
 }
-

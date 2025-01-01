@@ -26,6 +26,7 @@ const Navbar = () => {
                     description: 'You have been signed out',
                     duration: 3000
                 });
+                window.location.reload();
             } catch (error) {
                 const axiosError = error as AxiosError<{ message: string }>;
                 toast({

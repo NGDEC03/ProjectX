@@ -10,17 +10,20 @@ import { useUser } from '@/context/userContext'
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 
 export function ContestForm() {
-    const {user,updateUser}=useUser()
-  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { user } = useUser();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { register, control, handleSubmit, formState: { errors } } = useForm<ContestInput>({
     defaultValues: {
       problems: [{ description: '', testCases: [{ input: '', expectedOutput: '' }] }]
     }
-  })
+  });
+
   const { fields: problemFields, append: appendProblem, remove: removeProblem } = useFieldArray({
     control,
     name: "problems"
-  })
+  });
 
   const onSubmit = async (data: ContestInput) => {
     setIsSubmitting(true)
@@ -32,7 +35,7 @@ export function ContestForm() {
     alert('Contest created successfully!')
   }
 
-  return user?.IsAdmin?(
+  return user?.IsAdmin ? (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-full">
       <ContestDetails register={register} errors={errors} />
 
@@ -56,17 +59,17 @@ export function ContestForm() {
         </Button>
       </div>
     </form>
-  ):(
+  ) : (
     <AlertDialog open={true}>
-    <AlertDialogContent>
-      <AlertDialogHeader>
-        <AlertDialogTitle>Access Denied</AlertDialogTitle>
-        <AlertDialogDescription>
-          You do not have permission to access this page. Please contact an administrator if you believe this is an error.
-        </AlertDialogDescription>
-      </AlertDialogHeader>
-    </AlertDialogContent>
-  </AlertDialog>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Access Denied</AlertDialogTitle>
+          <AlertDialogDescription>
+            You do not have permission to access this page. Please contact an administrator if you believe this is an error.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }
 
