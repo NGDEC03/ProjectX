@@ -1,30 +1,44 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ContestCard } from '@/components/essentials/cont/contest-card'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useRouter } from 'next/navigation'
 import { Contest } from '@/types/User'
-// Mock data for contests
-const contests = localStorage.getItem('contests') || [
-  { id: '1', name: 'Summer Coding Challenge', status: 'active', startDate: '2023-07-01', endDate: '2023-07-31', participants: 120 },
-  { id: '2', name: 'AI Hackathon', status: 'pending', startDate: '2023-08-15', endDate: '2023-08-17', participants: 80 },
-  { id: '3', name: 'Web Dev Showdown', status: 'active', startDate: '2023-07-10', endDate: '2023-07-20', participants: 95 },
-  { id: '4', name: 'Data Science Cup', status: 'completed', startDate: '2023-06-01', endDate: '2023-06-30', participants: 150 },
-  { id: '5', name: 'Mobile App Challenge', status: 'pending', startDate: '2023-09-01', endDate: '2023-09-15', participants: 60 },
-]
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
+import { EditContestForm } from '@/components/essentials/edit-contest-form'
+import {X} from 'lucide-react'
+
+// Mock data removed
 
 export function AdminDashboard() {
+const contests=[
+  { id: '1', name: 'Summer Coding Challenge', status: 'active', startDate: '2023-07-01', endDate: '2023-07-31', participants: 120 },
+  { id: '1', name: 'Summer Coding Challenge', status: 'active', startDate: '2023-07-01', endDate: '2023-07-31', participants: 120 },
+  { id: '1', name: 'Summer Coding Challenge', status: 'active', startDate: '2023-07-01', endDate: '2023-07-31', participants: 120 },
+  { id: '1', name: 'Summer Coding Challenge', status: 'active', startDate: '2023-07-01', endDate: '2023-07-31', participants: 120 },
+  { id: '1', name: 'Summer Coding Challenge', status: 'active', startDate: '2023-07-01', endDate: '2023-07-31', participants: 120 },
+  
+]
   const [searchTerm, setSearchTerm] = useState('')
+  const [selectedContest, setSelectedContest] = useState<Contest | null>(null)
   const router = useRouter()
   const [statusFilter, setStatusFilter] = useState('all')
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  
 
   const filteredContests = contests.filter((contest: Contest) =>
     contest.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (statusFilter === 'all' || contest.status === statusFilter)
   )
+
+  const handleEditContest = (contest: Contest) => {
+    setSelectedContest(contest)
+    setIsDrawerOpen(true)
+  }
 
   return (
     <div className="space-y-6">
@@ -52,10 +66,42 @@ export function AdminDashboard() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredContests.map((contest) => (
-          <ContestCard key={contest.id} contest={contest} />
+          <div key={contest.id}>
+            <ContestCard contest={contest} />
+            <Button 
+              variant="outline" 
+              className="mt-2 w-full"
+              onClick={() => handleEditContest(contest)}
+            >
+              Edit Contest
+            </Button>
+          </div>
         ))}
       </div>
+
+      <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+  <DrawerContent className="h-[80vh] max-h-[800px]">
+    <DrawerHeader className="flex justify-between items-center border-b">
+      <DrawerTitle>Edit Contest: {selectedContest?.name}</DrawerTitle>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => setIsDrawerOpen(false)}
+        className="rounded-full"
+      >
+        <X className="h-4 w-4" />
+      </Button>
+    </DrawerHeader>
+    {selectedContest && (
+      <div className="p-4 overflow-y-auto">
+        <EditContestForm 
+          contestId={parseInt(selectedContest.id)} 
+          onSuccess={() => setIsDrawerOpen(false)}
+        />
+      </div>
+    )}
+  </DrawerContent>
+</Drawer>
     </div>
   )
 }
-

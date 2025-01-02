@@ -59,7 +59,8 @@ export function ContestForm() {
           }
         }
       )
-
+      console.log(contestResponse.data);
+      
       setSuccessMessage(contestResponse.data.message)
       form.reset()
     } catch (err) {
