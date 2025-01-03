@@ -1,13 +1,15 @@
 'use client';
-import {  Home, Settings, GitBranch, KeySquare, LogOutIcon } from 'lucide-react';
-import { ModeToggle } from '@/components/ui/ModeToggle';
-import Link from 'next/link';
-import { useUser } from '@/context/userContext';
-import axios, { AxiosError } from 'axios';
-import { useToast } from '@/hooks/use-toast';
-import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
-import { useRouter } from 'next/navigation';
+
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import axios, { AxiosError } from 'axios';
+import { useUser } from '@/context/userContext';
+import { useToast } from '@/hooks/use-toast';
+import { ModeToggle } from '@/components/ui/ModeToggle';
+import { RiAdminFill } from "react-icons/ri";
+import {  Home, Settings, GitBranch, KeySquare, LogOutIcon } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 
 const Navbar = () => {
     const router = useRouter()
@@ -72,7 +74,7 @@ const Navbar = () => {
                             { icon: Settings, label: 'Dashboard', link: '/dashboard' },
                             { icon: GitBranch, label: 'Leaderboard' , link: '/dashboard' },
                             // { icon: Award, label: 'Rewards' , link: '/' },
-                            // { icon: MessageCircle, label: 'Community' , link: '/' },
+                            { icon: RiAdminFill, label: 'Admin' , link: '/admin/dashboard' },
                             { icon: user ? LogOutIcon : KeySquare, label: user ? 'Logout' : 'Login', link: '/auth/signin', onClick: handleLogout }
                         ].map((item, index) => (
                             <Link

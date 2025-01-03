@@ -85,11 +85,12 @@ export function EditContestForm({ contestId, onSuccess, onClose }: EditContestFo
                 });
             } catch (error) {
                 const axiosError = error as AxiosError<{ message: string }>;
-                toast({
-                    title: "Error",
-                    description: axiosError.response?.data.message || "An error occurred.",
-                    variant: "destructive",
-                });
+                // toast({
+                //     title: "Error",
+                //     description: axiosError.response?.data.message || "An error occurred.",
+                //     variant: "destructive",
+                // });
+                console.log(axiosError.response?.data.message)
             } finally {
                 setIsLoading(false);
             }

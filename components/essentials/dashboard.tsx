@@ -34,9 +34,9 @@ export default function Dashboard() {
   }
 
   const statsCards = [
-    { title: "Total Contests", value: user?.Contests?.length || "TBD", change: "+2 from last month", icon: Trophy },
-    { title: "Global Ranking", value: user?.GlobalRank || "TBD", change: "Top 5% worldwide", icon: Users },
-    { title: "Contest Points", value: user?.CurrentRating || "TBD", change: "+1,254 this week", icon: Gift },
+    { title: "Total Contests", value: user?.Contests?.length || "TBD", icon: Trophy },
+    { title: "Global Ranking", value: user?.GlobalRank || "TBD", icon: Users },
+    { title: "Contest Points", value: user?.CurrentRating || "TBD", icon: Gift },
   ]
 
   return (

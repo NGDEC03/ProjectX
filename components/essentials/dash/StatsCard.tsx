@@ -5,11 +5,10 @@ import { FC } from "react";
 interface StatsCardProps {
     title: string;
     value: string | number;
-    change: string;
     icon: FC<{ className?: string }>;
 }
 
-const StatsCard: FC<StatsCardProps> = ({ title, value, change, icon: Icon }) => {
+const StatsCard: FC<StatsCardProps> = ({ title, value, icon: Icon }) => {
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -18,7 +17,6 @@ const StatsCard: FC<StatsCardProps> = ({ title, value, change, icon: Icon }) => 
             </CardHeader>
             <CardContent>
                 <div className="text-2xl font-bold">{value}</div>
-                <p className="text-xs text-muted-foreground">{change}</p>
             </CardContent>
         </Card>
     )

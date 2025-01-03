@@ -1,56 +1,37 @@
 'use client';
-import { useState, useEffect } from 'react';
-import axios, { AxiosError } from 'axios';
-import { ContestCard } from '@/components/essentials/cont/contest-card';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Contest } from '@/types/User';
+import { useContests } from '@/hooks/useContest';
+import { useUser } from '@/context/userContext';
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { ContestCard } from '@/components/essentials/cont/contest-card'; 
 import { EditContestDrawer } from '@/components/essentials/edit-contest-dialog';
 import { toast } from '@/hooks/use-toast';
 
 export default function AdminDashboard() {
-  const [userContests, setUserContests] = useState<Contest[]>([]);
-  const [otherContests, setOtherContests] = useState<Contest[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedContest, setSelectedContest] = useState<Contest | null>(null);
   const [statusFilter, setStatusFilter] = useState('all');
+  const [selectedContest, setSelectedContest] = useState<Contest | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  
   const router = useRouter();
+  const { user } = useUser();
+  const { data, isLoading, error } = useContests();
 
-  useEffect(() => {
-    fetchContests();
-  }, []);
-
-  const fetchContests = async () => {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/contest/get`, {
-        withCredentials: true,
-      });
-      setUserContests(response.data.user_contests || []);
-      setOtherContests(response.data.other_contests || []);
-    } catch (error) {
-      const axiosError = error as AxiosError<{ message: string }>;
-      toast({
-        title: "Error",
-        description: axiosError.response?.data.message || "An error occurred.",
-        variant: "destructive",
-      });
-    }
+  const filterContests = (contests: Contest[] = []) => {
+    return contests.filter(contest => {
+      const matchesSearch = contest.Name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || contest.Status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
   };
 
-  const filteredUserContests = userContests.filter(contest => {
-    const matchesSearch = contest.Name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || contest.Status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
-
-  const filteredOtherContests = otherContests.filter(contest => {
-    const matchesSearch = contest.Name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || contest.Status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const filteredContests = filterContests(data?.user_contests || []);
+  const userContests = filteredContests.filter(contest => contest.CreatorID === user?.ID);
+  const otherContests = filteredContests.filter(contest => contest.CreatorID !== user?.ID);
 
   const handleEditContest = (contest: Contest) => {
     setSelectedContest(contest);
@@ -64,12 +45,23 @@ export default function AdminDashboard() {
 
   const handleEditSuccess = () => {
     handleDrawerClose();
-    fetchContests();
     toast({
       title: "Success",
       description: "Contest updated successfully.",
     });
   };
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-red-500">
+        Error loading contests
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 w-full max-w-4xl mx-auto p-4">
@@ -96,30 +88,34 @@ export default function AdminDashboard() {
         </Button>
       </div>
 
-      {filteredUserContests.length > 0 && (
+      {userContests.length > 0 && (
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">Your Contests</h2>
           <div className="grid gap-4">
-            {filteredUserContests.map(contest => (
+            {userContests.map(contest => (
               <ContestCard
                 key={contest.ID}
                 contest={contest}
                 onEdit={() => handleEditContest(contest)}
+                onView={() => router.push(`/contest/${contest.ID}`)}
+                currentUser={user}
               />
             ))}
           </div>
         </div>
       )}
 
-      {filteredOtherContests.length > 0 && (
+      {otherContests.length > 0 && (
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">Other Contests</h2>
           <div className="grid gap-4">
-            {filteredOtherContests.map(contest => (
+            {otherContests.map(contest => (
               <ContestCard
                 key={contest.ID}
                 contest={contest}
                 onEdit={() => handleEditContest(contest)}
+                onView={() => router.push(`/contests/${contest.ID}`)}
+                currentUser={user}
               />
             ))}
           </div>

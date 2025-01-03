@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from "@/components/ui/button"
-import { ContestDetails } from './cont/contest-details'; 
+import { ContestDetails } from './cont/contest-details';
 import { ContestInput } from '@/types/contest'
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 import axios, { AxiosError } from 'axios'
@@ -50,7 +50,7 @@ export function ContestForm() {
       }
 
       const contestResponse = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/contest/create`, 
+        `${process.env.NEXT_PUBLIC_API_URL}/contest/create`,
         formattedData,
         {
           withCredentials: true,
@@ -60,7 +60,7 @@ export function ContestForm() {
         }
       )
       console.log(contestResponse.data);
-      
+
       setSuccessMessage(contestResponse.data.message)
       form.reset()
     } catch (err) {
@@ -96,8 +96,8 @@ export function ContestForm() {
       )}
 
       <div className="flex justify-end">
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           disabled={isSubmitting}
           className="w-full sm:w-auto"
         >

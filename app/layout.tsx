@@ -7,6 +7,7 @@ import Navbar from "@/components/layout/Navbar";
 import NextTopLoader from 'nextjs-toploader';
 import { UserContext } from "@/context/userContext";
 import { Toaster } from "@/components/ui/toaster";
+import { QueryProvider } from "@/context/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,24 +34,27 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <UserContext>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NextTopLoader
-            showSpinner={false}
-            color="#5eead4"
-          />
-          <ScrollBarProps>
-            <Navbar />
-            {children}
-            <Toaster />
-          </ScrollBarProps>
-        </ThemeProvider>
-        </UserContext>
+        <QueryProvider>
+
+          <UserContext>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <NextTopLoader
+                showSpinner={false}
+                color="#5eead4"
+              />
+              <ScrollBarProps>
+                <Navbar />
+                {children}
+                <Toaster />
+              </ScrollBarProps>
+            </ThemeProvider>
+          </UserContext>
+        </QueryProvider>
       </body>
     </html>
   );
