@@ -46,7 +46,7 @@ interface EditContestFormProps {
 
 export function EditContestForm({ contestId, onSuccess, onClose }: EditContestFormProps) {
     const [isLoading, setIsLoading] = useState(true);
-
+    const [disabled,setIsDisabled]=useState(false)
     const form = useForm<FormValues>({
         defaultValues: {
             contest_id: contestId,
@@ -96,10 +96,12 @@ export function EditContestForm({ contestId, onSuccess, onClose }: EditContestFo
         };
 
         fetchProblems();
+        setIsLoading(false)
     }, [contestId, form]);
 
     const onSubmit = async (data: FormValues) => {
         try {
+            setIsDisabled(true)
             const formattedData = {
                 ...data,
                 problems: data.problems.map(problem => ({
@@ -117,7 +119,7 @@ export function EditContestForm({ contestId, onSuccess, onClose }: EditContestFo
                 title: "Success",
                 description: "Contest problems updated successfully",
             });
-
+            setIsDisabled(false)
             onSuccess?.();
         } catch (error) {
             const axiosError = error as AxiosError<{ message: string }>;
@@ -426,7 +428,7 @@ export function EditContestForm({ contestId, onSuccess, onClose }: EditContestFo
                         <Button type="button" variant="outline" onClick={onClose}>
                             Cancel
                         </Button>
-                        <Button type="submit">{isLoading ? <Loader className="animate-spin"/> : "Save Changes"}</Button>
+                        <Button type="submit" disabled={disabled}>{isLoading ? <Loader className="animate-spin"/> : "Save Changes"}</Button>
                     </div>
                 </div>
             </form>
