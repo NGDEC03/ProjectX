@@ -1,3 +1,4 @@
+import Link from "next/link";
 
 const HeroSection = () => {
     return (
@@ -20,12 +21,12 @@ const HeroSection = () => {
                     </p>
 
                     <div className="flex gap-4 justify-center mb-20">
-                        <button className="bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-500 dark:to-cyan-500 text-white px-8 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity">
+                        <Link href={'/dashboard'} className="bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-500 dark:to-cyan-500 text-white px-8 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity">
                             View Contests
-                        </button>
-                        <button className="bg-slate-200 dark:bg-slate-800 px-8 py-3 rounded-full font-semibold hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+                        </Link>
+                        <Link href={'/dashboard'} className="bg-slate-200 dark:bg-slate-800 px-8 py-3 rounded-full font-semibold hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
                             Practice Now
-                        </button>
+                        </Link>
                     </div>
 
                 </div>

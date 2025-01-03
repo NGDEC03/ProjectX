@@ -52,7 +52,7 @@ export default function AdminDashboard() {
   };
 
   if (isLoading) {
-    return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+    return <div className="flex justify-center items-center min-h-screen w-full">Loading...</div>;
   }
 
   if (error) {
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
                 key={contest.ID}
                 contest={contest}
                 onEdit={() => handleEditContest(contest)}
-                onView={() => router.push(`/contests/${contest.ID}`)}
+                onView={() => router.push(`/contest/${contest.ID}`)}
                 currentUser={user}
               />
             ))}

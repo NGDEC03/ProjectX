@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
+import { Contest } from "@/types/User";
 import { Loader2 } from 'lucide-react'
-
 import { FC } from 'react';
 
 interface LiveContestItemProps {
@@ -8,11 +8,23 @@ interface LiveContestItemProps {
     iconColor: string;
     title: string;
     status: string;
-    onJoin: () => void;
     isLoading: boolean;
+    contest: Contest;
 }
 
-const LiveContestItem: FC<LiveContestItemProps> = ({ icon: Icon, iconColor, title, status, onJoin, isLoading }) => {
+const LiveContestItem: FC<LiveContestItemProps> = ({ icon: Icon, iconColor, title, status, isLoading, contest }) => {
+    const currentTime = new Date();
+    const isContestLive = currentTime >= new Date(contest.StartTime) && currentTime <= new Date(contest.EndTime);
+
+    const handleContestJoin = () => {
+        if (isContestLive) {
+            // will change it to contest window later
+            window.open('https://ankushsingh.tech', '_blank');
+        } else {
+            window.location.href = `/contest/${contest.ID}`;
+        }
+    }
+
     return (
         <div className="flex items-center">
             <div className={`w-12 h-12 rounded-full ${iconColor} flex items-center justify-center mr-4`}>
@@ -22,14 +34,14 @@ const LiveContestItem: FC<LiveContestItemProps> = ({ icon: Icon, iconColor, titl
                 <h3 className="text-lg font-semibold">{title}</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">{status}</p>
             </div>
-            <Button onClick={onJoin} disabled={isLoading} variant={isLoading ? "default" : "outline"}>
+            <Button onClick={handleContestJoin} disabled={isLoading} variant={isLoading ? "default" : "outline"}>
                 {isLoading ? (
                     <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Joining...
                     </>
                 ) : (
-                    title === 'AlgoMaster Challenge' ? 'Join Now' : 'Details'
+                    isContestLive ? 'Join Now' : 'Details'
                 )}
             </Button>
         </div>

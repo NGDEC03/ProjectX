@@ -61,7 +61,7 @@ const ContestPage = ({ id }: { id: unknown }) => {
                 </Badge>
 
                 <CardHeader>
-                    <CardTitle className="text-xl font-bold text-gray-900 pr-24">
+                    <CardTitle className="text-xl font-bold text-gray-900 dark:bg-gray-400 pr-24">
                         {contest.Name}
                     </CardTitle>
                 </CardHeader>

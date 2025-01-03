@@ -1,34 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Code, Globe, Trophy } from 'lucide-react'
+import { Trophy } from 'lucide-react'
 import LiveContestItem from "./LiveContestItem"
+import { Contest } from "@/types/User";
 
 interface LiveContestsProps {
-    onJoinContest: () => void;
     isLoading: boolean;
+    contests: Contest[];
 }
 
-const LiveContests = ({ onJoinContest, isLoading }: LiveContestsProps) => {
-    const contests = [
-        {
-            icon: Code,
-            iconColor: "bg-red-100 dark:bg-red-900",
-            title: "AlgoMaster Challenge",
-            status: "Live now! Ends in 2 hours"
-        },
-        {
-            icon: Globe,
-            iconColor: "bg-purple-100 dark:bg-purple-900",
-            title: "Global Coding Sprint",
-            status: "Starts in 5 days"
-        },
-        {
-            icon: Trophy,
-            iconColor: "bg-blue-100 dark:bg-blue-900",
-            title: "Weekly Championship",
-            status: "Starts in 2 days"
-        }
-    ]
-
+const LiveContests = ({ isLoading, contests }: LiveContestsProps) => {
     return (
         <Card>
             <CardHeader>
@@ -39,9 +19,12 @@ const LiveContests = ({ onJoinContest, isLoading }: LiveContestsProps) => {
                     {contests.map((contest, index) => (
                         <LiveContestItem
                             key={index}
-                            {...contest}
-                            onJoin={onJoinContest}
-                            isLoading={isLoading && contest.title === "AlgoMaster Challenge"}
+                            contest={contest}
+                            isLoading={isLoading && contest.Name === "AlgoMaster Challenge"}
+                            icon={Trophy}
+                            iconColor="gold"
+                            title={contest.Name}
+                            status="active"
                         />
                     ))}
                 </div>
