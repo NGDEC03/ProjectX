@@ -16,15 +16,17 @@ export function EditContestDrawer({ isOpen, onClose, contest, onSuccess }: EditC
 
   return (
     <Drawer open={isOpen} onOpenChange={open => !open && onClose()}>
-      <DrawerContent className="max-h-[90vh] overflow-y-auto">
-        <DrawerHeader className="flex justify-between items-center">
-          <DrawerTitle>Edit Contest: {contest.Name}</DrawerTitle>
-          <DrawerTitle>Contest Id: {contest.ID}</DrawerTitle>
+      <DrawerContent className="h-[90vh] flex flex-col">
+        <DrawerHeader className="flex justify-between items-center border-b">
+          <div className="flex flex-col gap-2">
+            <DrawerTitle>Edit Contest: {contest.Name}</DrawerTitle>
+            <span className="text-sm text-muted-foreground">Contest Id: {contest.ID}</span>
+          </div>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-4 w-4" />
           </Button>
         </DrawerHeader>
-        <div className="px-4 pb-4">
+        <div className="flex-1 overflow-y-auto px-4 pb-4">
           <EditContestForm
             contestId={contest.ID}
             onSuccess={onSuccess}

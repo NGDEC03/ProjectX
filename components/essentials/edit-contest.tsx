@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import axios, { AxiosError } from "axios";
 import { toast } from '@/hooks/use-toast';
 import { useEffect, useState } from 'react';
+import { Loader } from "lucide-react";
 
 interface TestCase {
     problem_id?: number;
@@ -425,7 +426,7 @@ export function EditContestForm({ contestId, onSuccess, onClose }: EditContestFo
                         <Button type="button" variant="outline" onClick={onClose}>
                             Cancel
                         </Button>
-                        <Button type="submit">Save Changes</Button>
+                        <Button type="submit">{isLoading ? <Loader className="animate-spin"/> : "Save Changes"}</Button>
                     </div>
                 </div>
             </form>

@@ -1,12 +1,30 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import axios from "axios"
+import { useEffect, useState } from "react"
+// import { useUser } from "@/context/userContext"
+import { Contest } from "@/types/User"
 import AttendedContestItem from "./AttendContestItem"
-import { useUser } from "@/context/userContext"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 const AttendedContests = () => {
-    const {user}=useUser()
-    const contests = user?.Contests|| [
-        { name: "Data Incoming", date: "July 1, 2023", score: 950, maxScore: 1000, rank: 3 },
-         ]
+    // const { user } = useUser()
+
+    const [contests, setContests] = useState<Contest[] | null>(null)
+
+    useEffect(() => {
+        const fetchContests = async () => {
+            try {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/contest/get`, {
+                    withCredentials: true,
+                })
+                const { user_contests } = response.data
+                setContests(user_contests)
+            } catch (error) {
+                console.error("Error fetching contests:", error)
+            }
+        }
+
+        fetchContests();
+    }, [])
 
     return (
         <Card>
@@ -15,14 +33,10 @@ const AttendedContests = () => {
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {contests.map((contest, index) => (
-                        <AttendedContestItem 
-                            key={index} 
-                            contestName={contest.name} 
-                            startTime={contest.date} 
-                            score={contest.score} 
-                            rank={contest.rank} 
-                            status="Completed" 
+                    {contests && contests.map((contest, index) => (
+                        <AttendedContestItem
+                            key={index}
+                            {...contest}
                         />
                     ))}
                 </div>

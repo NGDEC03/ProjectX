@@ -16,7 +16,7 @@ export default function DashboardPage() {
 
       {/* Dashboard content */}
       <div className="relative z-10 mt-20">
-       <Dashboard></Dashboard>
+        <Dashboard />
       </div>
     </div>
   )

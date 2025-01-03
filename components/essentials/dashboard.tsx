@@ -8,9 +8,9 @@ import StatsCard from './dash/StatsCard'
 import LiveContests from './dash/LiveContest'
 import ActivityChart from './dash/ActivityChart'
 import AttendedContests from './dash/AttendedContests'
-import ContestResults from './dash/ContestResults'
-import UpcomingSchedule from './dash/UpcomingSchedule'
-import Achievements from './dash/Achievements'
+// import ContestResults from './dash/ContestResults'
+// import UpcomingSchedule from './dash/UpcomingSchedule'
+// import Achievements from './dash/Achievements'
 
 const contestActivityData = [
   { name: 'Mon', value: 2 },
@@ -57,11 +57,11 @@ export default function Dashboard() {
       <AttendedContests />
 
       <div className="grid gap-6 md:grid-cols-2">
-        <ContestResults />
-        <UpcomingSchedule />
+        {/* <ContestResults /> */}
+        {/* <UpcomingSchedule /> */}
       </div>
 
-      <Achievements />
+      {/* <Achievements /> */}
     </div>
   )
 }
