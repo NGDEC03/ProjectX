@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useUser } from '@/context/userContext';
 
@@ -14,6 +14,7 @@ import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import ProfilePicture from './profilePicture';
 import axios, { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
 
 type ProfileFormData = {
   FirstName: string
@@ -30,6 +31,7 @@ export default function ProfileEditContent() {
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast();
+  const router = useRouter();
 
   const {
     register,
@@ -48,16 +50,16 @@ export default function ProfileEditContent() {
     },
   })
 
-  const onSubmit: SubmitHandler<ProfileFormData> = async (data : ProfileFormData) => {
+  const onSubmit: SubmitHandler<ProfileFormData> = async (data: ProfileFormData) => {
     setIsLoading(true)
     try {
       const dataToUpdate = {
-        first_name : data.FirstName || user?.FirstName,
-        last_name : data.LastName || user?.LastName,
-        email : user?.Email,
-        phone : data.Phone || user?.Phone,
-        password : data.Password ? data.Password : "",
-        gender : data.Gender || user?.Gender,
+        first_name: data.FirstName || user?.FirstName,
+        last_name: data.LastName || user?.LastName,
+        email: user?.Email,
+        phone: data.Phone || user?.Phone,
+        password: data.Password ? data.Password : "",
+        gender: data.Gender || user?.Gender,
       };
 
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/update-details`, dataToUpdate)
@@ -68,7 +70,7 @@ export default function ProfileEditContent() {
       })
       setIsEditing(false)
     } catch (error) {
-      const axiosError = error as AxiosError<{message : string}>;
+      const axiosError = error as AxiosError<{ message: string }>;
       console.log(error)
       toast({
         title: "Error",
@@ -86,6 +88,12 @@ export default function ProfileEditContent() {
     }
     setIsEditing(!isEditing)
   }
+
+  useEffect(() => {
+    if (!user?.Email) {
+      router.replace("/auth/signin")
+    }
+  }, [user?.Email, router]);
 
   return (
     <div className="container mx-auto p-6 mt-24">
