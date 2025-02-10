@@ -35,7 +35,7 @@ export default function Page() {
     // const fetchSubmissions = useCallback(async () => {
     //     try {
     //         const res = await axios.get(
-    //             `${process.env.NEXT_PUBLIC_API_URL}/submissions/${problemId}`,
+    //             `${process.env.NEXT_PUBLIC_API_URL}/live/submissions/${problemId}`,
     //             { withCredentials: true }
     //         );
     //         setSubmissions(res.data.submissions);

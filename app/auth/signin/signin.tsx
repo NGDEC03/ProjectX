@@ -10,10 +10,11 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useUser } from '@/context/userContext';
-import { useToast } from '@/hooks/use-toast';
+// import { useToast } from '@/hooks/use-toast';
 // import { BsGithub, BsGoogle } from 'react-icons/bs';
 import { Loader2 } from 'lucide-react';
 import { ResetPasswordDialog } from './ResetPassword';
+import { toast } from 'sonner';
 
 type FormData = {
   email: string;
@@ -30,7 +31,7 @@ const SignInForm = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const router = useRouter();
 
   const onSubmit = async (data: FormData) => {
@@ -40,20 +41,22 @@ const SignInForm = () => {
         withCredentials: true,
       });
       setUser(res.data.user);
-      toast({
-        title: 'Welcome back!',
-        description: 'You have successfully signed in',
-        duration: 3000,
-      });
+      toast.info('Welcome back! You have successfully signed in');
+      // toast({
+      //   title: 'Welcome back!',
+      //   description: 'You have successfully signed in',
+      //   duration: 3000,
+      // });
       router.push('/');
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
-      toast({
-        title: 'Error',
-        description: axiosError.response?.data.message || 'An error occurred',
-        duration: 3000,
-        variant: 'destructive',
-      });
+      toast.error(axiosError.response?.data.message || 'An error occurred');
+      // toast({
+      //   title: 'Error',
+      //   description: axiosError.response?.data.message || 'An error occurred',
+      //   duration: 3000,
+      //   variant: 'destructive',
+      // });
     } finally {
       setIsLoading(false);
     }

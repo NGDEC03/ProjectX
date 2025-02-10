@@ -6,7 +6,8 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import Navbar from "@/components/layout/Navbar";
 import NextTopLoader from 'nextjs-toploader';
 import { UserContext } from "@/context/userContext";
-import { Toaster } from "@/components/ui/toaster";
+// import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from 'sonner';
 import { QueryProvider } from "@/context/QueryProvider";
 
 const geistSans = Geist({
@@ -50,8 +51,8 @@ export default function RootLayout({
               <ScrollBarProps>
                 <Navbar />
                 {children}
-                <Toaster />
               </ScrollBarProps>
+              <Toaster richColors />
             </ThemeProvider>
           </UserContext>
         </QueryProvider>
